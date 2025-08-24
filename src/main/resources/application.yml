@@ -8,20 +8,17 @@ spring:
         completions-path: /chat/completions
         options:
           model: gemini-2.5-flash
+  datasource:
+    url: jdbc:mysql://localhost:3306/insuranceassistdb01?createDatabaseIfNotExist=true&user=root&password=admin@123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
   application:
     name: insuranceassist
 
-# Database configuration for in memory H2 database
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: password
-  h2:
-    console:
-      enabled: true
-
-# Server port to 9898
 server:
     port: 9898
 
