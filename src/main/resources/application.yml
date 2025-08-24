@@ -2,7 +2,6 @@
 spring:
   ai:
     openai:
-      api-key: AIzaSyDpbdB9PgVQNURbh8REMzZpGfZxYWL-uGc
       base-url: https://generativelanguage.googleapis.com/v1beta/openai
       chat:
         completions-path: /chat/completions
