@@ -13,7 +13,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class InsuranceServiceTest {
+class InsuranceModelServiceTest {
 
     @Mock
     private InsuranceRepository insuranceRepository;

@@ -5,6 +5,9 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+/**
+ * Service to handle chat interactions with AI
+ */
 @RequiredArgsConstructor
 @Service
 public class ChatService {

@@ -30,6 +30,9 @@
 			<artifactId>spring-ai-starter-model-openai</artifactId>
 		</dependency>
 
+		<!-- Spring security dependency -->
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

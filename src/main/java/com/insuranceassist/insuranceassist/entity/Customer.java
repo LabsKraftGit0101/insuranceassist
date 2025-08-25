@@ -6,6 +6,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+/**
+ * Entity class representing a Customer in the insurance system.
+ */
 @Data
 @Entity
 public class Customer {

@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Service to handle customer-related operations
+ */
 @Service
 public class CustomerService {
 

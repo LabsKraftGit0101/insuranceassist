@@ -2,13 +2,11 @@ package com.insuranceassist.insuranceassist.controller;
 
 import com.insuranceassist.insuranceassist.entity.Customer;
 import com.insuranceassist.insuranceassist.service.CustomerService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -17,41 +15,38 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    // Create or update a customer
-    @PostMapping
-    public ResponseEntity<Customer> saveCustomer(@RequestBody Customer customer) {
+    /**
+     * Register a new customer
+     *
+     * @param customer
+     * @return
+     */
+    @PostMapping("/register")
+    public ResponseEntity<?> registerCustomer(@RequestBody Customer customer) {
+        Customer existingCustomer = customerService.findCustomerByEmail(customer.getEmail());
+        if (existingCustomer != null) {
+            return new ResponseEntity<>("Customer already exists", HttpStatus.CONFLICT);
+        }
         Customer savedCustomer = customerService.saveCustomer(customer);
         return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
     }
 
-    // Find a customer by email
-    @GetMapping("/email/{email}")
-    public ResponseEntity<Customer> getCustomerByEmail(@PathVariable String email) {
-        Customer customer = customerService.findCustomerByEmail(email);
-        if (customer != null) {
-            return new ResponseEntity<>(customer, HttpStatus.OK);
+    /**
+     * Login a customer
+     *
+     * @param username
+     * @param password
+     * @param session
+     * @return
+     */
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password, HttpSession session) {
+        Customer customer = customerService.findCustomerByEmail(username);
+        if (customer != null && customer.getPassword().equals(password)) {
+            session.setAttribute("customerId", customer.getCustomerId());
+            return ResponseEntity.ok("Login successful");
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Invalid credentials", HttpStatus.UNAUTHORIZED);
     }
 
-    // Find a customer by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
-        Optional<Customer> customer = customerService.findCustomerById(id);
-        return customer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    // Delete a customer by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
-        customerService.deleteCustomer(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    // Get all customers (optional)
-    @GetMapping
-    public ResponseEntity<Iterable<Customer>> getAllCustomers() {
-        Iterable<Customer> customers = customerService.getAllCustomers();
-        return new ResponseEntity<>(customers, HttpStatus.OK);
-    }
 }

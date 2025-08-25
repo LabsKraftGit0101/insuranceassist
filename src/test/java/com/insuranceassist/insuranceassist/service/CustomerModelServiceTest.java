@@ -11,7 +11,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class CustomerServiceTest {
+class CustomerModelServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
