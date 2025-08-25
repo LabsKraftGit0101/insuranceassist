@@ -1,6 +1,7 @@
 package com.insuranceassist.insuranceassist.controller;
 
 import com.insuranceassist.insuranceassist.entity.Customer;
+import com.insuranceassist.insuranceassist.model.CustomerModel;
 import com.insuranceassist.insuranceassist.service.CustomerService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class CustomerController {
      * @return
      */
     @PostMapping("/register")
-    public ResponseEntity<?> registerCustomer(@RequestBody Customer customer) {
+    public ResponseEntity<?> registerCustomer(@RequestBody CustomerModel customer) {
         Customer existingCustomer = customerService.findCustomerByEmail(customer.getEmail());
         if (existingCustomer != null) {
             return new ResponseEntity<>("Customer already exists", HttpStatus.CONFLICT);

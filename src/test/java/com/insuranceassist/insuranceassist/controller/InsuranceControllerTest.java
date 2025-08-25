@@ -1,6 +1,6 @@
 package com.insuranceassist.insuranceassist.controller;
-
 import com.insuranceassist.insuranceassist.entity.Insurance;
+import com.insuranceassist.insuranceassist.model.InsuranceModel;
 import com.insuranceassist.insuranceassist.service.InsuranceService;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class InsuranceModelControllerTest {
+class InsuranceControllerTest {
 
     @Mock
     private InsuranceService insuranceService;
@@ -39,9 +39,9 @@ class InsuranceModelControllerTest {
     @Test
     void testCreateInsurance_Unauthorized() {
         when(session.getAttribute("customerId")).thenReturn(null);
-        Insurance insurance = new Insurance();
+        InsuranceModel insuranceModel = new InsuranceModel();
 
-        ResponseEntity<?> response = insuranceController.createInsurance(insurance, session);
+        ResponseEntity<?> response = insuranceController.createInsurance(insuranceModel, session);
 
         assertEquals(401, response.getStatusCodeValue());
         assertEquals("Unauthorized", response.getBody());
@@ -50,10 +50,11 @@ class InsuranceModelControllerTest {
     @Test
     void testCreateInsurance_Authorized() {
         mockLoggedIn();
+        InsuranceModel insuranceModel = new InsuranceModel();
         Insurance insurance = new Insurance();
-        when(insuranceService.saveInsurance(insurance)).thenReturn(insurance);
+        when(insuranceService.saveInsurance(insuranceModel, session)).thenReturn(insurance);
 
-        ResponseEntity<?> response = insuranceController.createInsurance(insurance, session);
+        ResponseEntity<?> response = insuranceController.createInsurance(insuranceModel, session);
 
         assertEquals(201, response.getStatusCodeValue());
         assertEquals(insurance, response.getBody());
@@ -123,28 +124,6 @@ class InsuranceModelControllerTest {
 
         assertEquals(404, response.getStatusCodeValue());
         assertNull(response.getBody());
-    }
-
-    @Test
-    void testDeleteInsurance_Unauthorized() {
-        when(session.getAttribute("customerId")).thenReturn(null);
-
-        ResponseEntity<?> response = insuranceController.deleteInsurance(1L, session);
-
-        assertEquals(401, response.getStatusCodeValue());
-        assertEquals("Unauthorized", response.getBody());
-    }
-
-    @Test
-    void testDeleteInsurance_Authorized() {
-        mockLoggedIn();
-        doNothing().when(insuranceService).deleteInsurance(1L);
-
-        ResponseEntity<?> response = insuranceController.deleteInsurance(1L, session);
-
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals("Insurance deleted", response.getBody());
-        verify(insuranceService, times(1)).deleteInsurance(1L);
     }
 
     @Test

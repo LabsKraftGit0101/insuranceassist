@@ -1,7 +1,9 @@
 package com.insuranceassist.insuranceassist.service;
 
 import com.insuranceassist.insuranceassist.entity.Insurance;
+import com.insuranceassist.insuranceassist.model.InsuranceModel;
 import com.insuranceassist.insuranceassist.repository.InsuranceRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +24,13 @@ public class InsuranceService {
     }
 
     // Create or update an insurance
-    public Insurance saveInsurance(Insurance insurance) {
-        return insuranceRepository.save(insurance);
+    public Insurance saveInsurance(InsuranceModel insurance, HttpSession session) {
+        Insurance insuranceEntity = new Insurance();
+        // teake customerId from session
+        Long customerId = (Long) session.getAttribute("customerId");
+        insuranceEntity.setCustomerId(customerId);
+        insuranceEntity.setDetails(insurance.getDetails());
+        return insuranceRepository.save(insuranceEntity);
     }
 
     // Get insurances by customer ID

@@ -2,6 +2,7 @@
 package com.insuranceassist.insuranceassist.controller;
 
 import com.insuranceassist.insuranceassist.entity.Insurance;
+import com.insuranceassist.insuranceassist.model.InsuranceModel;
 import com.insuranceassist.insuranceassist.service.InsuranceService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -36,11 +37,12 @@ public class InsuranceController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<?> createInsurance(@RequestBody Insurance insurance, HttpSession session) {
+    public ResponseEntity<?> createInsurance(@RequestBody InsuranceModel insurance, HttpSession session) {
         if (!isLoggedIn(session)) {
             return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
         }
-        Insurance savedInsurance = insuranceService.saveInsurance(insurance);
+
+        Insurance savedInsurance = insuranceService.saveInsurance(insurance, session);
         return new ResponseEntity<>(savedInsurance, HttpStatus.CREATED);
     }
 
@@ -77,22 +79,6 @@ public class InsuranceController {
         }
         Optional<Insurance> insurance = insuranceService.getInsuranceById(insuranceId);
         return insurance.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    /**
-     * Delete insurance by ID
-     *
-     * @param insuranceId
-     * @param session
-     * @return
-     */
-    @DeleteMapping("/{insuranceId}")
-    public ResponseEntity<?> deleteInsurance(@PathVariable Long insuranceId, HttpSession session) {
-        if (!isLoggedIn(session)) {
-            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
-        }
-        insuranceService.deleteInsurance(insuranceId);
-        return ResponseEntity.ok("Insurance deleted");
     }
 
     /**

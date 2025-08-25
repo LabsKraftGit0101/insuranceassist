@@ -1,6 +1,7 @@
 package com.insuranceassist.insuranceassist.service;
 
 import com.insuranceassist.insuranceassist.entity.Customer;
+import com.insuranceassist.insuranceassist.model.CustomerModel;
 import com.insuranceassist.insuranceassist.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,12 @@ public class CustomerService {
     }
 
     // Create or update a customer
-    public Customer saveCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public Customer saveCustomer(CustomerModel customer) {
+        Customer customerEntity = new Customer();
+        customerEntity.setName(customer.getName());
+        customerEntity.setEmail(customer.getEmail());
+        customerEntity.setPassword(customer.getPassword());
+        return customerRepository.save(customerEntity);
     }
 
     // Find a customer by email

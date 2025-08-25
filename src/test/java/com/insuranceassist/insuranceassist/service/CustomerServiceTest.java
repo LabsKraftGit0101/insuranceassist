@@ -1,17 +1,17 @@
 package com.insuranceassist.insuranceassist.service;
 import com.insuranceassist.insuranceassist.entity.Customer;
+import com.insuranceassist.insuranceassist.model.CustomerModel;
 import com.insuranceassist.insuranceassist.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class CustomerModelServiceTest {
+class CustomerServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
@@ -29,7 +29,8 @@ class CustomerModelServiceTest {
         Customer customer = new Customer();
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
-        Customer result = customerService.saveCustomer(customer);
+        CustomerModel customerModel = new CustomerModel();
+        Customer result = customerService.saveCustomer(customerModel);
 
         assertEquals(customer, result);
     }

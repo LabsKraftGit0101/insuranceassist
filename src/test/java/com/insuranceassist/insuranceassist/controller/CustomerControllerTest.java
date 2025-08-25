@@ -1,6 +1,7 @@
 package com.insuranceassist.insuranceassist.controller;
 
 import com.insuranceassist.insuranceassist.entity.Customer;
+import com.insuranceassist.insuranceassist.model.CustomerModel;
 import com.insuranceassist.insuranceassist.service.CustomerService;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class CustomerModelControllerTest {
+class CustomerControllerTest {
 
     @Mock
     private CustomerService customerService;
@@ -29,12 +30,14 @@ class CustomerModelControllerTest {
 
     @Test
     void testRegisterCustomer_NewCustomer() {
+        CustomerModel customerModel = new CustomerModel();
+        customerModel.setEmail("test@example.com");
         Customer customer = new Customer();
         customer.setEmail("test@example.com");
         when(customerService.findCustomerByEmail("test@example.com")).thenReturn(null);
-        when(customerService.saveCustomer(customer)).thenReturn(customer);
+        when(customerService.saveCustomer(customerModel)).thenReturn(customer);
 
-        ResponseEntity<?> response = customerController.registerCustomer(customer);
+        ResponseEntity<?> response = customerController.registerCustomer(customerModel);
 
         assertEquals(201, response.getStatusCodeValue());
         assertEquals(customer, response.getBody());
@@ -42,11 +45,13 @@ class CustomerModelControllerTest {
 
     @Test
     void testRegisterCustomer_ExistingCustomer() {
+        CustomerModel customerModel = new CustomerModel();
+        customerModel.setEmail("test@example.com");
         Customer customer = new Customer();
         customer.setEmail("test@example.com");
         when(customerService.findCustomerByEmail("test@example.com")).thenReturn(customer);
 
-        ResponseEntity<?> response = customerController.registerCustomer(customer);
+        ResponseEntity<?> response = customerController.registerCustomer(customerModel);
 
         assertEquals(409, response.getStatusCodeValue());
         assertEquals("Customer already exists", response.getBody());
